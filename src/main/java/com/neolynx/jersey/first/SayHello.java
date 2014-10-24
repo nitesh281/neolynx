@@ -5,6 +5,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.neolynx.pojo.SpringTestMessage;
+
 //Sets the path to base URL + /hello
 @Path("/hello")
 public class SayHello {
@@ -13,14 +18,14 @@ public class SayHello {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String sayPlainTextHello() {
-		return "Let the interesting times begin!!!";
+		return getMessage();
 	}
 
 	// This method is called if XML is request
 	@GET
 	@Produces(MediaType.TEXT_XML)
 	public String sayXMLHello() {
-		return "<?xml version=\"1.0\"?>" + "<hello> Let the interesting times begin!!!" + "</hello>";
+		return "<?xml version=\"1.0\"?>" + getMessage() + "</hello>";
 	}
 
 	// This method is called if HTML is request
@@ -28,7 +33,16 @@ public class SayHello {
 	@Produces(MediaType.TEXT_HTML)
 	public String sayHtmlHello() {
 		return "<html> " + "<title>" + "Hello Jersey" + "</title>"
-				+ "<body><h1>" + "Let the interesting times begin!!!" + "</body></h1>" + "</html> ";
+				+ "<body><h1>" + getMessage() + "</body></h1>" + "</html> ";
+	}
+
+	public String getMessage() {
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				"springConfig.xml");
+		SpringTestMessage bean = (SpringTestMessage) context
+				.getBean("messageBean");
+
+		return "Let the interesting times begin!!!" + "\n" + bean.sayHello();
 	}
 
 }
