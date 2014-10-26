@@ -1,4 +1,4 @@
-package com.neolynx.pojo;
+package com.neolynx.domain;
 
 public class SpringTestMessage {
 
